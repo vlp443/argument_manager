@@ -15,7 +15,7 @@ Example code coming soon.this is a very rough untested placeholder
 
   def callback_b(values):
     value = values.get_cb_value()
-    value2 = values.get_another-value()
+    value2 = values.get_another_value()
 
 try:
     argManager = args.ArgsManagerFactory().getManager() \

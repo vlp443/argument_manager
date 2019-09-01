@@ -1,0 +1,33 @@
+@startuml
+title Standard Execution
+actor user
+participant Application as app
+participant "ArgManager" << (C,#ADD1B2) >>
+participant "Values" << (C,#ADD1B2) >>
+user->app:./app.py ~--value1 ~--action --value2
+
+app->Values ** : << Construct >>
+return self:Values
+create ArgManager
+app->ArgManager :<< Construct(Values) >>
+return self:ArgManager
+group add supported arguments
+    app->ArgManager:add value (value_x)
+    app->ArgManager:add value (value_y)
+    app->ArgManager:add action (callback, action_z)
+    app->ArgManager:add value (value_a, params)
+end
+
+app->ArgManager:exec
+loop for each action in command line
+    return callback(Values)
+    app->Values:get_value_x()
+    opt value exists
+        return  value
+        app->app: do something\ninteresting
+    else value not found
+        == Throw\nParameterError\nException==
+    end
+    note right: All values available to action\nregardless of order entered\non command line.\n\nMultiple actions can be passed\nin and will execute consecutively
+end
+@enduml

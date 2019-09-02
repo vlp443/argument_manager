@@ -5,13 +5,12 @@ import  parser
 from injector import Injector, inject
 
 
+
 class ParameterError(Exception):
-    def __init__(self, value):
-        self.value = value
+    pass
 
-    def __str__(self):
-        return repr(self.value)
-
+class ActionError(Exception):
+    pass
 
 class ArgValues:
 
@@ -66,10 +65,14 @@ class ArgManager:
         values, ignore = self.valueParser.parse_known_args()
         self._argValues.set_values(values)
         args, ignored = self.actionParser.parse_known_args()
+        methodCalled = False
         for key in vars(args):
             if getattr(args, key) and key in self._callbacks:
+                methodCalled = True
                 self._currentAction = key.replace('_', '-')
                 self._callbacks[key](self._argValues)
+        if not methodCalled:
+            raise ActionError('Nothing to do')
         return self
 
     def print_help(self):
@@ -80,5 +83,7 @@ class ArgManager:
 
 
 def get_manager():
-    injector = Injector()
-    return injector.get(ArgManager)
+    return ArgManager(ArgumentParser(add_help=False), ArgumentParser(add_help=False), ArgValues())
+
+    # injector = Injector()
+    # return injector.get(ArgManager)

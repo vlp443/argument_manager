@@ -13,9 +13,7 @@ class TestArgsManager(unittest.TestCase):
         mock_fn = MagicMock()
         argv = ['prog', '--find']
         with patch.object(sys, 'argv', argv):
-            state_parser = argparse.ArgumentParser()
-            action_parser = argparse.ArgumentParser()
-            arg_manager = parser.ArgManager(state_parser, action_parser, parser.ArgValues())
+            arg_manager= parser.get_manager();
             (arg_manager.add_action(mock_fn, '--find', help="find home assistants within a given address range",
                 action='store_true')) \
                 .exec()
@@ -25,9 +23,7 @@ class TestArgsManager(unittest.TestCase):
         mock_fn = MagicMock()
         argv = ['prog', '--info']
         with patch.object(sys, 'argv', argv):
-            state_parser = argparse.ArgumentParser()
-            action_parser = argparse.ArgumentParser()
-            arg_manager = parser.ArgManager(state_parser, action_parser, parser.ArgValues())
+            arg_manager= parser.get_manager();
             (arg_manager.add_action(mock_fn, '--find', help="find home assistants within a given address range",
                 action='store_true')) \
                 .exec()

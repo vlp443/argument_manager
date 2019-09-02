@@ -1,7 +1,8 @@
-import argparse
+from  argparse import ArgumentParser
 from argparse import SUPPRESS
 import re
 import  parser
+from injector import Injector, inject
 
 
 class ParameterError(Exception):
@@ -31,8 +32,8 @@ class ArgValues:
 
 
 class ArgManager:
-
-    def __init__(self, state_parser, actionParser, argValues):
+    @inject
+    def __init__(self, state_parser: ArgumentParser, actionParser : ArgumentParser, argValues: ArgValues):
         self._argValues = argValues
         self._callbacks = {}
         self.valueParser = state_parser
@@ -78,6 +79,6 @@ class ArgManager:
         self.actionParser.print_help()
 
 
-class ArgsManagerFactory:
-    def get_manager(self):
-        return ArgManager(argparse.ArgumentParser(), argparse.ArgumentParser(), ArgValues())
+def get_manager():
+    injector = Injector()
+    return injector.get(ArgManager)

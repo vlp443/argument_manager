@@ -2,7 +2,7 @@ from  argparse import ArgumentParser
 from argparse import SUPPRESS
 import re
 import  parser
-from injector import Injector, inject
+# from injector import Injector, inject
 
 
 
@@ -31,7 +31,7 @@ class ArgValues:
 
 
 class ArgManager:
-    @inject
+  #  @inject
     def __init__(self, state_parser: ArgumentParser, actionParser : ArgumentParser, argValues: ArgValues):
         self._argValues = argValues
         self._callbacks = {}

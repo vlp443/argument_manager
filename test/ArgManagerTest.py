@@ -2,8 +2,8 @@ import unittest
 import argparse
 from unittest.mock import MagicMock
 import sys
-from unittest.mock import patch
 import parser
+from unittest.mock import patch
 
 
 class TestArgsManager(unittest.TestCase):

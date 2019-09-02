@@ -4,6 +4,13 @@
 * Provides a simple mechenism to seperate actions from values
 * Allows execution of multiple actions against the same value set
 
+### Requires 
+* https://github.com/alecthomas/injector 
+~~~
+    pip install injector
+~~~
+(Not sure why I wouldnt add it as a submodule)
+
 ![GitHub Logo](doc/operational_flow.png)
 
 
@@ -18,7 +25,7 @@ Example code coming soon.this is a very rough untested placeholder
     value2 = values.get_another_value()
 
 
-    argManager = args.ArgsManagerFactory().getManager() \
+    argManager = parser.getManager() \
         .add_action(callback_a, '--exec-callback', help="execute a function called callback a", action='store_true') \
         .add_value('--cb-value', metavar='a value for exec-callback', nargs=1, default=[10])\
         .add_value('--another-value', metavar='a value used in callback2', nargs=1, default=[10])\

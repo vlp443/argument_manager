@@ -30,6 +30,13 @@ class TestArgsManager(unittest.TestCase):
                 arg_manager.exec()
             self.assertFalse(mock_fn.called)
 
+    def test_set_default_action(self):
+        mock_fn = MagicMock()
+        argv = ['prog', '--anything']
+        with patch.object(sys, 'argv', argv):
+            arg_manager= parser.get_manager()
+            arg_manager.set_default_action(mock_fn).exec()
+            self.assertTrue(mock_fn.called)
 
 # @todo create tests for values (how to make an iterable with attrs)
 

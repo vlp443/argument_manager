@@ -33,22 +33,27 @@ class ArgValues:
 class ArgManager:
   #  @inject
     def __init__(self, state_parser: ArgumentParser, actionParser : ArgumentParser, argValues: ArgValues):
-        self._argValues = argValues
+        self._arg_values = argValues
         self._callbacks = {}
-        self.valueParser = state_parser
-        self.valueParser.usage = SUPPRESS
-        self.actionParser = actionParser
-        self.actionParser.usage = SUPPRESS
-        self._currentAction = None
+        self.value_parser = state_parser
+        self.value_parser.usage = SUPPRESS
+        self.action_parser = actionParser
+        self.action_parser.usage = SUPPRESS
+        self._current_action = None
+        self._default_action = None
 
     def add_value(self, *args, **kwargs):
-        self.valueParser.add_argument(*args, **kwargs)
+        self.value_parser.add_argument(*args, **kwargs)
+        return self
+
+    def set_default_action(self, action):
+        self._default_action = action
         return self
 
     def add_action(self, callback, *args, **kwargs):
-        self.actionParser.add_argument(*args, **kwargs)
+        self.action_parser.add_argument(*args, **kwargs)
         # @todo: either subclass action parser to gain true access to this or find another way
-        dest = self.actionParser._option_string_actions[args[0]].dest
+        dest = self.action_parser._option_string_actions[args[0]].dest
         # @todo: find out how this gets replaced in argparser
         self.set_action(dest.replace('-', '_'), callback)
         return self
@@ -59,27 +64,30 @@ class ArgManager:
         return self
 
     def get_current_action(self):
-        return self._currentAction
+        return self._current_action
 
     def exec(self):
-        values, ignore = self.valueParser.parse_known_args()
-        self._argValues.set_values(values)
-        args, ignored = self.actionParser.parse_known_args()
-        methodCalled = False
+        values, ignore = self.value_parser.parse_known_args()
+        self._arg_values.set_values(values)
+        args, ignored = self.action_parser.parse_known_args()
+        method_called = False
         for key in vars(args):
             if getattr(args, key) and key in self._callbacks:
-                methodCalled = True
-                self._currentAction = key.replace('_', '-')
-                self._callbacks[key](self._argValues)
-        if not methodCalled:
-            raise ActionError('Nothing to do')
+                method_called = True
+                self._current_action = key.replace('_', '-')
+                self._callbacks[key](self._arg_values)
+        if not method_called:
+            if self._default_action:
+                self._default_action(self._arg_values)
+            else:
+                raise ActionError('Nothing to do')
         return self
 
     def print_help(self):
         print("\nSETTINGS\n")
-        self.valueParser.print_help()
+        self.value_parser.print_help()
         print("\nACTIONS\n")
-        self.actionParser.print_help()
+        self.action_parser.print_help()
 
 
 def get_manager():

@@ -5,11 +5,7 @@
 * Allows execution of multiple actions against the same value set
 
 ### Requires 
-* https://github.com/alecthomas/injector 
-~~~
-    pip install injector
-~~~
-(Not sure why I wouldnt add it as a submodule)
+~~https://github.com/alecthomas/injector~~ 
 
 ![GitHub Logo](doc/operational_flow.png)
 

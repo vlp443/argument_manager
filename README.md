@@ -5,7 +5,6 @@
 * Allows execution of multiple actions against the same value set
 
 ### Requires 
-~~https://github.com/alecthomas/injector~~ 
 
 ![GitHub Logo](doc/operational_flow.png)
 

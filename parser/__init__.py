@@ -25,9 +25,13 @@ class ArgValues:
         # You can manually specify the number of replacements by changing the 4th argument
         key = (re.sub("^get_(.*)$", "\\1", name))
         if key in self._vals and getattr(self._vals, key):
-            return lambda: getattr(self._vals, key)[0]
+            return lambda ignored = True: getattr(self._vals, key)[0]
         else:
-            raise ParameterError('Missing argument: ' + key.replace('_', '-'))
+            def handle_empty(default=None):
+                if(default is None):
+                    raise ParameterError('Missing argument: ' + key.replace('_', '-'))
+                return default
+            return handle_empty
 
 
 class ArgManager:
